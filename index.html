@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loja de Artes Digitais</title>
+ <style>
+    /* ========== ESTILOS GERAIS ========== */
+    /* Fundo do corpo com tema pet */
+    body {
+      font-family: 'Comic Neue', cursive, Arial, sans-serif;
+      background: 
+        url('https://images.unsplash.com/photo-1594149929911-78975a43d4f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: #4a3c30; /* Cor de texto marrom escuro */
+      padding: 20px;
+      margin-bottom: 400px; /* Espaço para o carrinho fixo */
+    }
+
+    /* Overlay amarelo claro semi-transparente */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255, 246, 197, 0.4); /* Amarelo claro */
+      z-index: -1;
+    }
+
+    /* ========== ESTILO DO TÍTULO PRINCIPAL ========== */
+    /* Título com tema pet */
+    h1 {
+      text-align: center;
+      font-size: 3.5em;
+      color: #ff7e33; /* Laranja */
+      text-shadow: 
+        2px 2px 0px #fff,
+        4px 4px 0px rgba(0,0,0,0.1);
+      border: 3px dashed #ff9e4f; /* Borda laranja tracejada */
+      padding: 15px 30px;
+      border-radius: 30px;
+      background-color: rgba(255, 255, 255, 0.85); /* Fundo branco semi-transparente */
+      box-shadow: 
+        0 4px 15px rgba(0,0,0,0.1),
+        inset 0 0 10px rgba(255, 158, 79, 0.3);
+      margin-bottom: 40px;
+      font-family: 'Chewy', cursive; /* Fonte divertida */
+      letter-spacing: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Pegadas de animais no título */
+    h1::before {
+      content: '🐾';
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      font-size: 1.5em;
+    }
+
+    h1::after {
+      content: '🐾';
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
+      font-size: 1.5em;
+    }
+
+    /* ========== ESTILO DOS PRODUTOS ========== */
+    /* Container responsivo para os produtos */
+    .produtos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Layout responsivo */
+      gap: 25px;
+      align-items: stretch;
+    }
+
+    /* Card de produto individual - formato de osso */
+    .produto {
+      background: rgba(255, 255, 255, 0.9); /* Fundo branco */
+      border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%; /* Formato de osso */
+      border: 3px solid #ff9e4f; /* Borda laranja */
+      box-shadow: 
+        0 4px 10px rgba(0,0,0,0.1),
+        inset 0 0 5px rgba(255, 158, 79, 0.3);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Efeito hover para os produtos */
+    .produto:hover {
+      transform: translateY(-5px) rotate(2deg);
+      box-shadow: 
+        0 8px 20px rgba(0,0,0,0.15),
+        0 0 0 3px #ff9e4f;
+    }
+
+    /* Imagem do produto */
+    .produto img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ffd5b3;
+    }
+
+    /* Título do produto */
+    .produto h3 {
+      margin: 0 0 10px 0;
+      color: #ff7e33; /* Laranja */
+      font-size: 1.4em;
+      font-family: 'Chewy', cursive;
+      text-align: center;
+    }
+
+    /* Descrição do produto */
+    .produto p {
+      color: #5a5a5a; /* Texto cinza médio */
+      flex-grow: 1;
+      margin-bottom: 15px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    /* Preço do produto */
+    .produto .preco {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #e67a00; /* Laranja escuro */
+      margin: 15px 0;
+      text-align: center;
+      font-family: 'Comic Neue', cursive;
+    }
+
+    /* Botão de adicionar ao carrinho */
+    .btn-adicionar {
+      background: linear-gradient(to bottom, #ff9e4f, #ff7e33); /* Gradiente laranja */
+      width: 80%;
+      border: none;
+      color: white;
+      padding: 12px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      font-family: 'Comic Neue', cursive;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* Ícone do botão */
+    .btn-adicionar::before {
+      content: '🐶';
+      font-size: 1.2em;
+    }
+
+    /* Efeito hover do botão */
+    .btn-adicionar:hover {
+      background: linear-gradient(to bottom, #ff7e33, #ff9e4f);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transform: translateY(-2px) scale(1.05);
+    }
+
+    /* ========== ESTILO DO CARRINHO FIXO ========== */
+    /* Container do carrinho fixo na parte inferior - formato de casinha de cachorro */
+    .carrinho-fixo {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70%;
+      max-width: 1200px;
+      background: linear-gradient(to bottom, #fff9e6, #ffe8cc); /* Gradiente amarelo claro */
+      color: #4a3c30;
+      z-index: 1000;
+      box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+      border-radius: 15px 15px 0 0;
+      border: 3px solid #ff9e4f;
+      border-bottom: none;
+      transition: all 0.4s ease;
+      clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 50% 100%, 0% 85%);
+    }
+
+    /* Cabeçalho do carrinho */
+    .carrinho-cabecalho {
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      background: #ffe8cc;
+      border-bottom: 1px solid #ffd5b3;
+      border-radius: 15px 15px 0 0;
+    }
+
+    /* Título do carrinho */
+    .carrinho-cabecalho h2 {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      color: #ff7e33;
+      font-family: 'Chewy', cursive;
+      letter-spacing: 1px;
+    }
+
+    /* Ícone do carrinho */
+    .carrinho-cabecalho h2 i {
+      margin-right: 10px;
+      color: #ff9e4f;
+    }
+
+    /* Contador de itens no carrinho - formato de placa de cachorro */
+    .contador-carrinho {
+      background: #ff7e33;
+      color: white;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-family: 'Comic Neue', cursive;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      border: 2px solid white;
+    }
+
+    /* Conteúdo do carrinho (expandível) */
+    .carrinho-conteudo {
+      background: #fff9e6;
+      color: #4a3c30;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, padding 0.3s ease;
+    }
+
+    /* Estado aberto do carrinho */
+    .carrinho-conteudo.aberto {
+      max-height: 500px;
+      padding: 20px;
+      overflow-y: auto;
+      border-top: 1px solid #ffd5b3;
+    }
+
+    /* Item individual no carrinho */
+    .carrinho-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed #ff9e4f;
+      padding: 12px 0;
+      font-family: 'Comic Neue', cursive;
+    }
+
+    /* Botão de remover item - formato de patinha */
+    .carrinho-item button {
+      background: #e74c3c;
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-family: 'Comic Neue', cursive;
+      transition: all 0.3s ease;
+    }
+
+    /* Efeito hover do botão de remover */
+    .carrinho-item button:hover {
+      background: #c0392b;
+      transform: rotate(10deg);
+    }
+
+    /* Seção de resumo do carrinho */
+    .resumo {
+      margin-top: 20px;
+      font-weight: bold;
+      background: #ffe8cc;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #ffd5b3;
+      font-family: 'Comic Neue', cursive;
+    }
+
+    /* Texto do resumo */
+    .resumo p {
+      margin: 8px 0;
+      text-align: right;
+      color: #4a3c30;
+    }
+
+    /* Total do carrinho */
+    .resumo p:last-child {
+      color: #ff7e33;
+      font-size: 1.3em;
+    }
+
+    /* ========== FORMULÁRIO DO CARRINHO ========== */
+    .formulario-carrinho {
+      margin-top: 20px;
+      padding: 20px;
+      background: #fff9e6;
+      border-radius: 8px;
+      border: 1px solid #ffd5b3;
+    }
+
+    /* Campos de entrada */
+    .formulario-carrinho input,
+    .formulario-carrinho textarea {
+      width: 95%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ff9e4f;
+      background: white;
+      color: #4a3c30;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      font-family: 'Comic Neue', cursive;
+    }
+
+    /* Placeholder estilizado */
+    .formulario-carrinho input::placeholder,
+    .formulario-carrinho textarea::placeholder {
+      color: #aaa;
+      font-family: 'Comic Neue', cursive;
+    }
+
+    /* Efeito focus nos campos */
+    .formulario-carrinho input:focus,
+    .formulario-carrinho textarea:focus {
+      outline: none;
+      border-color: #ff7e33;
+      box-shadow: 0 0 0 2px rgba(255, 126, 51, 0.3);
+    }
+
+    /* Área de texto */
+    .formulario-carrinho textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    /* Container dos botões */
+    .botoes-carrinho {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      gap: 15px;
+    }
+
+    /* Estilo base dos botões */
+    .botoes-carrinho button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Comic Neue', cursive;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* Botão limpar carrinho */
+    .btn-limpar {
+      background: #95a5a6;
+      color: white;
+    }
+
+    /* Ícone do botão */
+    .btn-limpar::before {
+      content: '🚫';
+    }
+
+    /* Efeito hover do botão limpar */
+    .btn-limpar:hover {
+      background: #7f8c8d;
+    }
+
+    /* Botão finalizar compra */
+    .btn-finalizar {
+      background: linear-gradient(to bottom, #ff9e4f, #ff7e33);
+      color: white;
+    }
+
+    /* Ícone do botão */
+    .btn-finalizar::before {
+      content: '🐕';
+    }
+
+    /* Efeito hover do botão finalizar */
+    .btn-finalizar:hover {
+      background: linear-gradient(to bottom, #ff7e33, #ff9e4f);
+      transform: scale(1.05);
+    }
+
+    /* ========== QR CODE ========== */
+    .qrcode-container {
+      text-align: center;
+      margin: 20px 0;
+      padding: 15px;
+      background: #ffe8cc;
+      border-radius: 8px;
+      border: 1px dashed #ff9e4f;
+    }
+
+    .qrcode-img {
+      max-width: 180px;
+      height: auto;
+      border: 1px solid #ff9e4f;
+      padding: 5px;
+      background: white;
+      border-radius: 8px;
+    }
+
+    /* ========== CONTADOR DE VISITAS ========== */
+    .contador-visitas {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(255, 232, 204, 0.9);
+      padding: 8px 15px;
+      border-radius: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      font-size: 14px;
+      color: #ff7e33;
+      z-index: 9999;
+      border: 1px solid #ff9e4f;
+      font-family: 'Comic Neue', cursive;
+    }
+
+    /* Ícone do contador */
+    .contador-visitas::before {
+      content: '👣';
+      margin-right: 5px;
+    }
+
+    /* ========== ANIMAÇÕES ========== */
+    /* Animação de "salto" para itens adicionados */
+    @keyframes bump {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .bump {
+      animation: bump 0.4s ease;
+    }
+
+    /* Animação de balanço */
+    @keyframes wag {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      75% { transform: rotate(-5deg); }
+    }
+
+    /* ========== ELEMENTOS DECORATIVOS ========== */
+    /* Pegadas decorativas */
+    .paw-decoration {
+      position: absolute;
+      opacity: 0.3;
+      z-index: -1;
+      font-size: 2em;
+      animation: wag 2s infinite;
+    }
+
+    /* ========== ESTILO RESPONSIVO ========== */
+    @media (max-width: 768px) {
+      /* Ajustes para telas menores */
+      h1 {
+        font-size: 2.2em;
+        padding: 10px 15px;
+      }
+
+      .produtos-container {
+        grid-template-columns: 1fr;
+      }
+
+      .produto {
+        border-radius: 20px; /* Mais simples em mobile */
+      }
+
+      .carrinho-fixo {
+        width: 95%;
+        clip-path: none; /* Remove formato de casinha em mobile */
+      }
+
+      .carrinho-conteudo.aberto {
+        max-height: 60vh;
+      }
+
+      .formulario-carrinho input,
+      .formulario-carrinho textarea {
+        width: 92%;
+        font-size: 14px;
+      }
+
+      .botoes-carrinho {
+        flex-direction: column;
+      }
+
+      .contador-visitas {
+        bottom: 10px;
+        left: 10px;
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      /* Ajustes para telas muito pequenas */
+      h1 {
+        font-size: 1.8em;
+      }
+
+      .produto img {
+        height: 180px;
+      }
+
+      .btn-adicionar {
+        width: 90%;
+        padding: 10px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+  <!-- TÍTULO PRINCIPAL -->
+  <h1>NOME DA LOJA</h1>
+
+  <!-- SEÇÃO DE PRODUTOS -->
+  <div class="produtos-container" >
+    <!-- PRODUTO 1 -->
+    <div class="produto" align="center">
+      <img src="" alt="Nome do Produto" >
+      <h3>Nome do Produto</h3>
+      <p>Descrição do Produto</p>
+      <div class="preco">R$ 24,99</div>
+      <button class="btn-adicionar"  onclick="adicionarAoCarrinho('Flyer Digital', 24.99) ">Adicionar ao Carrinho</button>
+    </div>
+
+    <!-- PRODUTO 2 -->
+    <div class="produto">
+      <img src="" alt="Nome do Produto">
+      <h3>Nome do Produto</h3>
+      <p>Descrição do Produto</p>
+      <div class="preco">R$ 69,99</div>
+      <button class="btn-adicionar" onclick="adicionarAoCarrinho('Brasão Personalizado', 69.99)">Adicionar ao Carrinho</button>
+    </div>
+
+    <!-- PRODUTO 3 -->
+    <div class="produto">
+      <img src="" alt="Nome do Produto">
+      <h3>Nome do Produto</h3>
+      <p>Descrição do Produto.</p>
+      <div class="preco">R$ 249,99</div>
+      <button class="btn-adicionar" onclick="adicionarAoCarrinho('Site Institucional', 249.99)">Adicionar ao Carrinho</button>
+    </div>
+
+    <!-- PRODUTO 4 -->
+    <div class="produto">
+      <img src="" alt="Nome do Produto">
+      <h3>Nome do Produto</h3>
+      <p>Descrição do Produto</p>
+      <div class="preco">R$ 99,99</div>
+      <button class="btn-adicionar" onclick="adicionarAoCarrinho('Logo Profissional', 99.99)">Adicionar ao Carrinho</button>
+    </div>
+
+    <div class="produto">
+      <img src="" alt="Nome do Produto">
+      <h3>Nome do Produto</h3>
+      <p>Descrição do Produto</p>
+      <div class="preco">R$ 1,99</div>
+      <button class="btn-adicionar" onclick="adicionarAoCarrinho('Fotografia', 1.99)">Adicionar ao Carrinho</button>
+    </div>
+
+    <!-- PRODUTO 5 -->
+    <div class="produto">
+      <img src="" alt="Nome do Produto">
+      <h3>Nome do Produto</h3>
+      <p>Descrição do Produto</p>
+      <div class="preco">R$ 74,99</div>
+      <button class="btn-adicionar" onclick="adicionarAoCarrinho('Cartão de Visita', 74.99)">Adicionar ao Carrinho</button>
+    </div>
+
+    <!-- PRODUTO 6 -->
+    <div class="produto">
+      <img src="" alt="Nome do Produto">
+      <h3>Nome do Produto</h3>
+      <p>Descrição do Produto</p>
+      <div class="preco">R$ 199,99</div>
+      <button class="btn-adicionar" onclick="adicionarAoCarrinho('Banner do Seu Orixá', 199.99)">Adicionar ao Carrinho</button>
+    </div>
+  </div>
+
+  <!-- CARRINHO FIXO NA PARTE INFERIOR -->
+  <div class="carrinho-fixo" id="carrinhoFixo">
+    <div class="carrinho-cabecalho" onclick="alternarCarrinho()">
+      <h2><i class="fas fa-shopping-cart"></i> Seu Carrinho</h2>
+      <div class="contador-carrinho" id="contadorCarrinho">0</div>
+    </div>
+    <div class="carrinho-conteudo" id="carrinhoConteudo">
+      <div id="lista-carrinho"></div>
+      
+      <div class="resumo">
+        <p>Total: R$ <span id="total">0.00</span></p>
+        <p>Sinal (35%): R$ <span id="sinal">0.00</span></p>
+        <p>Faltante: R$ <span id="faltante">0.00</span></p>
+        
+        <!-- FORMULÁRIO NO RESUMO -->
+        <div class="formulario-carrinho">
+          <input type="text" id="nome" placeholder="Seu nome" required>
+          <textarea id="mensagem" placeholder="Observações adicionais"></textarea>
+        </div>
+        
+        <!-- QR CODE -->
+        <div class="qrcode-container">
+          <img src="" alt="QR Code para Pagamento" class="qrcode-img">
+        </div>
+      </div>
+      
+      <div class="botoes-carrinho">
+        <button class="btn-limpar" onclick="limparCarrinho()">Limpar Carrinho</button>
+        <button class="btn-finalizar" onclick="enviarPedidoWhatsApp()">
+          <i class="fab fa-whatsapp"></i> Finalizar Pedido
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTADOR DE VISITAS -->
+  <div class="contador-visitas" id="contador-visitas"></div>
+
+<script>
+  // Array para armazenar os itens do carrinho
+  const carrinho = [];
+
+  /**
+   * Alterna a exibição do carrinho (abre/fecha)
+   */
+  function alternarCarrinho() {
+    const conteudo = document.getElementById('carrinhoConteudo');
+    conteudo.classList.toggle('aberto');
+  }
+
+  /**
+   * Adiciona um item ao carrinho
+   */
+  function adicionarAoCarrinho(item, preco) {
+    carrinho.push({ item, preco });
+    atualizarCarrinho();
+    
+    // Feedback visual ao adicionar item
+    const btn = event.target;
+    btn.textContent = '✔ Adicionado!';
+    btn.style.backgroundColor = '#5cb85c';
+    setTimeout(() => {
+      btn.textContent = 'Adicionar ao Carrinho';
+      btn.style.backgroundColor = '#28a745';
+    }, 1000);
+
+    // Animação no contador
+    const contador = document.getElementById('contadorCarrinho');
+    contador.classList.add('bump');
+    setTimeout(() => contador.classList.remove('bump'), 300);
+  }
+
+  /**
+   * Remove um item do carrinho
+   */
+  function removerDoCarrinho(index) {
+    carrinho.splice(index, 1);
+    atualizarCarrinho();
+  }
+
+  /**
+   * Limpa todos os itens do carrinho
+   */
+  /**
+ * Limpa todos os itens do carrinho e fecha o carrinho
+ */
+function limparCarrinho() {
+    carrinho.length = 0;
+    atualizarCarrinho();
+    document.getElementById('nome').value = '';
+    document.getElementById('mensagem').value = '';
+    
+    // Fecha o carrinho após limpar
+    document.getElementById('carrinhoConteudo').classList.remove('aberto');
+}
+
+  /**
+   * Atualiza a exibição do carrinho
+   */
+  function atualizarCarrinho() {
+    const lista = document.getElementById('lista-carrinho');
+    const contador = document.getElementById('contadorCarrinho');
+    lista.innerHTML = '';
+    let total = 0;
+
+    if (carrinho.length === 0) {
+      lista.innerHTML = '<p style="text-align:center; color:#666;">Seu carrinho está vazio</p>';
+      contador.textContent = '0';
+    } else {
+      carrinho.forEach((produto, index) => {
+        total += produto.preco;
+        const item = document.createElement('div');
+        item.className = 'carrinho-item';
+        item.innerHTML = `
+          <span>${produto.item}</span>
+          <span>R$ ${produto.preco.toFixed(2)} 
+            <button onclick="removerDoCarrinho(${index})">X</button>
+          </span>`;
+        lista.appendChild(item);
+      });
+      contador.textContent = carrinho.length;
+    }
+
+    // Calcula valores do pedido
+    const sinal = total * 0.35;
+    const faltante = total - sinal;
+    
+    // Atualiza os valores na tela
+    document.getElementById('total').innerText = total.toFixed(2);
+    document.getElementById('sinal').innerText = sinal.toFixed(2);
+    document.getElementById('faltante').innerText = faltante.toFixed(2);
+  }
+
+  /**
+   * Envia o pedido via WhatsApp
+   */
+  function enviarPedidoWhatsApp() {
+    const nome = document.getElementById('nome').value.trim();
+    const mensagem = document.getElementById('mensagem').value.trim();
+
+    // Validação do formulário
+    if (!nome) {
+      alert('Por favor, preencha seu nome.');
+      return;
+    }
+
+    if (carrinho.length === 0) {
+      alert('Seu carrinho está vazio.');
+      return;
+    }
+
+    // Formata os itens do carrinho para a mensagem
+    const itens = carrinho.map(p => `• ${p.item} - R$ ${p.preco.toFixed(2)}`).join('%0A');
+    const total = carrinho.reduce((sum, item) => sum + item.preco, 0);
+    const sinal = total * 0.35;
+    const faltante = total - sinal;
+
+    // Monta a mensagem completa
+    const texto = `*PEDIDO - Loja de Artes Digitais*%0A%0A` +
+                 `*Cliente:* ${nome}%0A%0A` +
+                 `*Itens:*%0A${itens}%0A%0A` +
+                 `*Total:* R$ ${total.toFixed(2)}%0A` +
+                 `*Sinal (35%):* R$ ${sinal.toFixed(2)}%0A` +
+                 `*Faltante:* R$ ${faltante.toFixed(2)}%0A%0A` +
+                 `*Observações:* ${mensagem || 'Nenhuma'}`;
+
+    // Envia para WhatsApp
+    window.open(`https://wa.me/5551989727254?text=${texto}`, '_blank');
+
+    // Limpa o carrinho
+    carrinho.length = 0;
+    atualizarCarrinho();
+    document.getElementById('nome').value = '';
+    document.getElementById('mensagem').value = '';
+  }
+
+  // Contador de visitas
+  let contador = localStorage.getItem('contadorVisitas') || 1;
+  contador = parseInt(contador) + 1;
+  localStorage.setItem('contadorVisitas', contador);
+  document.getElementById('contador-visitas').innerHTML = `👁️<b>${contador}</b>`;
+</script>
+
+</body>
+</html>
