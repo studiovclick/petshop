@@ -316,20 +316,27 @@ function sendWhatsApp() {
   }
 
   const items = state.cart
-    .map((item, index) => `${index + 1}. ${item.name} - ${money(item.price)}`)
-    .join('%0A');
+    .map((item) => `• ${item.name} - ${money(item.price)}`)
+    .join('\n');
 
   const total = state.cart.reduce((sum, item) => sum + item.price, 0);
   const whatsappNumber = '5551989727254';
-  const message = encodeURIComponent(
-    `Olá! Gostaria de fazer o pedido.%0A%0A` +
-    `Itens:%0A${items}%0A%0A` +
-    `Quantidade: ${state.cart.length}%0A` +
-    `Total: ${money(total)}%0A%0A` +
-    `Por favor, me confirme o prazo de entrega e a forma de pagamento.`
-  );
+  
+  const message = `PEDIDO PETSHOP VIDA ANIMAL
 
-  window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+Itens Selecionados:
+${items}
+
+═══════════════════════════════
+Quantidade: ${state.cart.length} itens
+TOTAL: ${money(total)}
+═══════════════════════════════
+
+Observação:
+Gostaria de confirmar o prazo de entrega e a forma de pagamento. Obrigado! Aguardo o retorno para finalizar.`;
+
+  const encodedMessage = encodeURIComponent(message);
+  window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
   clearCart();
   toggleCart(false);
 }
